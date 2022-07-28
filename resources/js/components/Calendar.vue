@@ -1,58 +1,9 @@
-<template>
-  <div class="container">
-    <div class="row justify-content-center">
-      <div class="col-md-8">
-        <form @submit.prevent>
-          <div class="form-group">
-            <label for="event_name">Event Name</label>
-            <input type="text" id="event_name" class="form-control" v-model="newEvent.event_name">
-          </div>
-          <div class="row">
-            <div class="col-md-6">
-              <div class="form-group">
-                <label for="start_date">Start Date</label>
-                <input
-                  type="date"
-                  id="start_date"
-                  class="form-control"
-                  v-model="newEvent.start_date"
-                >
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="form-group">
-                <label for="end_date">End Date</label>
-                <input type="date" id="end_date" class="form-control" v-model="newEvent.end_date">
-              </div>
-            </div>
-            <div class="col-md-6 mb-4" v-if="addingMode">
-              <button class="btn btn-sm btn-primary" @click="addNewEvent">Save Event</button>
-            </div>
-            <template v-else>
-              <div class="col-md-6 mb-4">
-                <button class="btn btn-sm btn-success" @click="updateEvent">Update</button>
-                <button class="btn btn-sm btn-danger" @click="deleteEvent">Delete</button>
-                <button class="btn btn-sm btn-secondary" @click="addingMode = !addingMode">Cancel</button>
-              </div>
-            </template>
-          </div>
-        </form>
-      </div>
-      <div class="col-md-8">
-        <Fullcalendar @eventClick="showEvent" :plugins="calendarPlugins" :events="events"/>
-      </div>
-    </div>
-  </div>
-</template>
-
 <script>
 import Fullcalendar from "@fullcalendar/vue";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import axios from "axios";
-
 //import { mapGetters } from "vuex";
-
 export default {
   name: 'Calendar',
   components: {
@@ -159,26 +110,76 @@ export default {
   }
 };
 </script>
+<template>
+  <div class="demo-app">
+    
+      <div class="demo-app-sidebar">
+        <form @submit.prevent class='demo-app-sidebar-section'>
+              <div class="demo-app-sidebar-section col-md-6">
+                      <label for="event_name">Event Name</label>
+                      <input type="text" id="event_name" class="form-control" v-model="newEvent.event_name">
+              </div>
+          <div class="demo-app-sidebar-section">
+                  
+                  <div class="demo-app-sidebar-section-child col-md-6">
+                      <div class="form-group">
+                        <label for="start_date">Start Date</label>
+                        <input
+                          type="date"
+                          id="start_date"
+                          class="form-control"
+                          v-model="newEvent.start_date"
+                        >
+                      </div>
+                  </div>
+                  <div class="demo-app-sidebar-section-child col-md-6">
+                      <div class=" form-group">
+                        <label for="end_date">End Date</label>
+                        <input type="date" id="end_date" class="form-control" v-model="newEvent.end_date">
+                      </div>
+                  </div>
+                  <div class=" demo-app-sidebar-section-child col-md-6 mb-4" v-if="addingMode">
+                    <button class="btn btn-sm btn-primary" @click="addNewEvent">Save Event</button>
+                  </div>
+            <template v-else>
+              <div class="demo-app-sidebar-section-child col-md-6 mb-4">
+                <button class="btn btn-sm btn-success" @click="updateEvent">Update</button>
+                <button class="btn btn-sm btn-danger" @click="deleteEvent">Delete</button>
+                <button class="btn btn-sm btn-secondary" @click="addingMode = !addingMode">Cancel</button>
+              </div>
+            </template>
+          </div>
+
+        </form>
+      </div>
+      <div class="demo-app-main">
+        <Fullcalendar @eventClick="showEvent" :plugins="calendarPlugins" :events="events"/>
+      </div>
+    
+  </div>
+</template>
+
+
 
 <style lang="css">
 @import "~@fullcalendar/core/main.css";
 @import "~@fullcalendar/daygrid/main.css";
-
-.fc-title {
+/* .fc-title {
   color: #fff;
 }
-
 .fc-title:hover {
   cursor: pointer;
+} */
+.fc { /* the calendar root */
+  max-width: 1100px;
+  margin: 0 auto;
 }
-
-.container {
+.demo-app {
   display: flex;
   min-height: 100%;
   font-family: Arial, Helvetica Neue, Helvetica, sans-serif;
   font-size: 14px;
 }
-
 .demo-app-main {
   flex-grow: 1;
   padding: 3em;
@@ -189,5 +190,12 @@ export default {
   background: #eaf9ff;
   border-right: 1px solid #d3e2e8;
 }
-</style>
+.demo-app-sidebar-section {
+  padding: 2em;
+}
+.demo-app-sidebar-section-child {
+  height: 30px;
+  /* width: 50%; */
+}
 
+</style>

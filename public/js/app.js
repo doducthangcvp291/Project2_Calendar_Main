@@ -15289,19 +15289,18 @@ var render = function render() {
       _c = _vm._self._c;
 
   return _c("div", {
-    staticClass: "container"
+    staticClass: "demo-app"
   }, [_c("div", {
-    staticClass: "row justify-content-center"
-  }, [_c("div", {
-    staticClass: "col-md-8"
+    staticClass: "demo-app-sidebar"
   }, [_c("form", {
+    staticClass: "demo-app-sidebar-section",
     on: {
       submit: function submit($event) {
         $event.preventDefault();
       }
     }
   }, [_c("div", {
-    staticClass: "form-group"
+    staticClass: "demo-app-sidebar-section col-md-6"
   }, [_c("label", {
     attrs: {
       "for": "event_name"
@@ -15329,9 +15328,9 @@ var render = function render() {
       }
     }
   })]), _vm._v(" "), _c("div", {
-    staticClass: "row"
+    staticClass: "demo-app-sidebar-section"
   }, [_c("div", {
-    staticClass: "col-md-6"
+    staticClass: "demo-app-sidebar-section-child col-md-6"
   }, [_c("div", {
     staticClass: "form-group"
   }, [_c("label", {
@@ -15361,7 +15360,7 @@ var render = function render() {
       }
     }
   })])]), _vm._v(" "), _c("div", {
-    staticClass: "col-md-6"
+    staticClass: "demo-app-sidebar-section-child col-md-6"
   }, [_c("div", {
     staticClass: "form-group"
   }, [_c("label", {
@@ -15391,14 +15390,14 @@ var render = function render() {
       }
     }
   })])]), _vm._v(" "), _vm.addingMode ? _c("div", {
-    staticClass: "col-md-6 mb-4"
+    staticClass: "demo-app-sidebar-section-child col-md-6 mb-4"
   }, [_c("button", {
     staticClass: "btn btn-sm btn-primary",
     on: {
       click: _vm.addNewEvent
     }
   }, [_vm._v("Save Event")])]) : [_c("div", {
-    staticClass: "col-md-6 mb-4"
+    staticClass: "demo-app-sidebar-section-child col-md-6 mb-4"
   }, [_c("button", {
     staticClass: "btn btn-sm btn-success",
     on: {
@@ -15417,7 +15416,7 @@ var render = function render() {
       }
     }
   }, [_vm._v("Cancel")])])]], 2)])]), _vm._v(" "), _c("div", {
-    staticClass: "col-md-8"
+    staticClass: "demo-app-main"
   }, [_c("Fullcalendar", {
     attrs: {
       plugins: _vm.calendarPlugins,
@@ -15426,7 +15425,7 @@ var render = function render() {
     on: {
       eventClick: _vm.showEvent
     }
-  })], 1)])]);
+  })], 1)]);
 };
 
 var staticRenderFns = [];
@@ -15634,7 +15633,7 @@ exports.i(__webpack_require__(/*! -!../../../node_modules/css-loader??ref--6-1!.
 exports.i(__webpack_require__(/*! -!../../../node_modules/css-loader??ref--6-1!../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!@fullcalendar/daygrid/main.css */ "./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/@fullcalendar/daygrid/main.css"), "");
 
 // module
-exports.push([module.i, "\n.fc-title {\r\n  color: #fff;\n}\n.fc-title:hover {\r\n  cursor: pointer;\n}\n.container {\r\n  display: flex;\r\n  min-height: 100%;\r\n  font-family: Arial, Helvetica Neue, Helvetica, sans-serif;\r\n  font-size: 14px;\n}\n.demo-app-main {\r\n  flex-grow: 1;\r\n  padding: 3em;\n}\n.demo-app-sidebar {\r\n  width: 300px;\r\n  line-height: 1.5;\r\n  background: #eaf9ff;\r\n  border-right: 1px solid #d3e2e8;\n}\r\n", ""]);
+exports.push([module.i, "\n/* .fc-title {\r\n  color: #fff;\r\n}\r\n.fc-title:hover {\r\n  cursor: pointer;\r\n} */\n.fc { /* the calendar root */\r\n  max-width: 1100px;\r\n  margin: 0 auto;\n}\n.demo-app {\r\n  display: flex;\r\n  min-height: 100%;\r\n  font-family: Arial, Helvetica Neue, Helvetica, sans-serif;\r\n  font-size: 14px;\n}\n.demo-app-main {\r\n  flex-grow: 1;\r\n  padding: 3em;\n}\n.demo-app-sidebar {\r\n  width: 300px;\r\n  line-height: 1.5;\r\n  background: #eaf9ff;\r\n  border-right: 1px solid #d3e2e8;\n}\n.demo-app-sidebar-section {\r\n  padding: 2em;\n}\n.demo-app-sidebar-section-child {\r\n  height: 30px;\r\n  /* width: 50%; */\n}\r\n\r\n", ""]);
 
 // exports
 
