@@ -52,5 +52,8 @@ export default {
         LOGIN: (context) => {
             context.commit('LOGIN');
         },
+        LOGOUT: (context) => {
+            context.commit('LOGOUT');
+        }
     }
 }

@@ -3,6 +3,7 @@ import Fullcalendar from "@fullcalendar/vue";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import axios from "axios";
+import { logout } from '../helpers/auth';
 //import { mapGetters } from "vuex";
 export default {
   name: 'Calendar',
@@ -29,10 +30,9 @@ export default {
   methods: {
     addNewEvent() {
       axios
-        .post("/api/calendar",{ headers: { Authorization: 'Bearer '+ this.$store.state.currentUser.token } }, {
-          ...this.newEvent
-        })
+        .post("/api/calendar",{...this.newEvent },{ headers: { Authorization: 'Bearer '+ this.$store.state.Auth.currentUser.token } }, )
         .then(data => {
+          console.log("data added : ",data);
           this.getEvents(); // update our list of events
           this.resetForm(); // clear newEvent properties (e.g. title, start_date and end_date)
         })
@@ -54,9 +54,9 @@ export default {
     },
     updateEvent() {
       axios
-        .put("/api/calendar/" + this.indexToUpdate,{ headers: { Authorization: 'Bearer '+ this.$store.state.currentUser.token } }, {
+        .put("/api/calendar/" + this.indexToUpdate, {
           ...this.newEvent
-        })
+        },{ headers: { Authorization: 'Bearer '+ this.$store.state.Auth.currentUser.token} })
         .then(resp => {
           this.resetForm();
           this.getEvents();
@@ -68,7 +68,7 @@ export default {
     },
     deleteEvent() {
       axios
-        .delete("/api/calendar/" + this.indexToUpdate,{ headers: { Authorization: 'Bearer '+ this.$store.state.currentUser.token } })
+        .delete("/api/calendar/" + this.indexToUpdate,{ headers: { Authorization: 'Bearer '+ this.$store.state.Auth.currentUser.token } })
         .then(resp => {
           this.resetForm();
           this.getEvents();
@@ -101,7 +101,24 @@ export default {
       Object.keys(this.newEvent).forEach(key => {
         return (this.newEvent[key] = "");
       });
-    }
+    },
+
+    userLogOut() {//cho vao button log out
+        this.$store.dispatch("LOGOUT");
+
+        logout(this.$store.state.Auth.currentUser.token)// ham login ben help/auth
+            .then(res => {
+                console.log("res after LOGOUT:  ",res);
+                //this.$store.commit("LOGIN_SUCCESS", res);
+                this.$router.push({path: '/login'}).catch(()=>{});
+                //console.log("state after login : ",this.$store.state)
+            })
+            .catch(err => {
+                //this.$store.commit("LOGIN_FAILED", {err})
+                this.showAlert(this.authError, 'error');
+            })
+    },
+    
   },
   watch: {
     indexToUpdate() {
@@ -115,12 +132,11 @@ export default {
     
       <div class="demo-app-sidebar">
         <form @submit.prevent class='demo-app-sidebar-section'>
-              <div class="demo-app-sidebar-section col-md-6">
+              <div class="demo-app-sidebar-section ">
                       <label for="event_name">Event Name</label>
                       <input type="text" id="event_name" class="form-control" v-model="newEvent.event_name">
               </div>
-          <div class="demo-app-sidebar-section">
-                  
+          <div class="demo-app-sidebar-section">                  
                   <div class="demo-app-sidebar-section-child col-md-6">
                       <div class="form-group">
                         <label for="start_date">Start Date</label>

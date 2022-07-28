@@ -39,7 +39,8 @@ class CalendarController extends Controller
      */
     public function store(Request $request)
     {
-        $new_calendar = Calendar::create($request->all());
+        $user  = auth()->user();
+        $new_calendar = Calendar::create(array_merge($request->all(),['user_id' => $user->id]));
         return response()->json([
             'data' => new CalendarResource($new_calendar),
             'message' => 'Successfully added new event!',
