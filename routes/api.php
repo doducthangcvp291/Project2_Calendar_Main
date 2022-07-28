@@ -30,6 +30,15 @@ Route::group(['middleware' => 'api',
     Route::post('me', 'AuthController@me');
     Route::post('register', 'AuthController@register');
     Route::post('payload', 'AuthController@payload');
+    
 });
 
-Route::resource('calendar', CalendarController::class);
+Route::group(['middleware' => 'api','namespace' => 'App\Http\Controllers','prefix' => 'calendar'],function(){
+    //Route::resource('calendar', CalendarController::class);
+    Route::get('/', 'CalendarController@index')->name('calendar.index');  
+    Route::post('/', 'CalendarController@store')->name('calendar.store');
+    Route::delete('/{id}', 'CalendarController@destroy')->name('calendar.delete');      
+});    
+
+
+//Route::resource('calendar', CalendarController::class);

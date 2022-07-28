@@ -78,7 +78,7 @@ export default {
   methods: {
     addNewEvent() {
       axios
-        .post("/api/calendar",{ headers: { Authorization: this.$store.state.currentUser.token } }, {
+        .post("/api/calendar",{ headers: { Authorization: 'Bearer '+ this.$store.state.currentUser.token } }, {
           ...this.newEvent
         })
         .then(data => {
@@ -103,7 +103,7 @@ export default {
     },
     updateEvent() {
       axios
-        .put("/api/calendar/" + this.indexToUpdate,{ headers: { Authorization: this.$store.state.currentUser.token } }, {
+        .put("/api/calendar/" + this.indexToUpdate,{ headers: { Authorization: 'Bearer '+ this.$store.state.currentUser.token } }, {
           ...this.newEvent
         })
         .then(resp => {
@@ -117,7 +117,7 @@ export default {
     },
     deleteEvent() {
       axios
-        .delete("/api/calendar/" + this.indexToUpdate,{ headers: { Authorization: this.$store.state.currentUser.token } })
+        .delete("/api/calendar/" + this.indexToUpdate,{ headers: { Authorization: 'Bearer '+ this.$store.state.currentUser.token } })
         .then(resp => {
           this.resetForm();
           this.getEvents();
@@ -129,7 +129,7 @@ export default {
     },
     async getEvents() {
             try {
-                const res = await axios.get("/api/calendar",{ headers: { Authorization: this.$store.state.currentUser.token } })
+                const res = await axios.get("/api/calendar",{ headers: { Authorization: 'Bearer '+ this.$store.state.Auth.currentUser.token } })
                 console.log(" Res getEvent: ",res)
                 this.events = res.data.data ;                                     
             } catch (error) {
@@ -170,6 +170,24 @@ export default {
 
 .fc-title:hover {
   cursor: pointer;
+}
+
+.container {
+  display: flex;
+  min-height: 100%;
+  font-family: Arial, Helvetica Neue, Helvetica, sans-serif;
+  font-size: 14px;
+}
+
+.demo-app-main {
+  flex-grow: 1;
+  padding: 3em;
+}
+.demo-app-sidebar {
+  width: 300px;
+  line-height: 1.5;
+  background: #eaf9ff;
+  border-right: 1px solid #d3e2e8;
 }
 </style>
 

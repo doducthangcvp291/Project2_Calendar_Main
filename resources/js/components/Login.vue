@@ -54,8 +54,10 @@
 
                 login(this.$data.form)// ham login ben help/auth
                     .then(res => {
+                        console.log("res after login:  ",res);
                         this.$store.commit("LOGIN_SUCCESS", res);
-                        this.$router.push({path: '/'});
+                        this.$router.push({path: '/'}).catch(()=>{});
+                        //console.log("state after login : ",this.$store.state)
                     })
                     .catch(err => {
                         this.$store.commit("LOGIN_FAILED", {err})
@@ -70,3 +72,42 @@
         }
     }
 </script>
+<style type="text/css">
+button {
+  background-color: #04AA6D;
+  color: white;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+}
+
+button:hover {
+  opacity: 0.8;
+}
+input[type=email], input[type=password] {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+}
+.card {
+  padding: 16px;
+}
+.btn {
+  width: 100%;
+  padding: 10px;
+  border: none;
+  border-radius: 4px;
+  margin: 5px 0;
+  opacity: 0.85;
+  display: inline-block;
+  font-size: 15px;
+  line-height: 14px;
+  text-decoration: none; /* remove underline from anchors */
+}
+
+</style>
