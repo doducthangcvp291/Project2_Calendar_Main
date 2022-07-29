@@ -139,16 +139,16 @@ export default {
 };
 </script>
 <template>
-  <div class="demo-app">
+  <div class="calendar-app">
     
-      <div class="demo-app-sidebar">
-        <form @submit.prevent class='demo-app-sidebar-section'>
-              <div class="demo-app-sidebar-section ">
+      <div class="calendar-app-sidebar">
+        <form @submit.prevent class='calendar-app-sidebar-section'>
+              <div class="calendar-app-sidebar-section ">
                       <label for="event_name">Event Name</label>
                       <input type="text" id="event_name" class="form-control" v-model="newEvent.event_name">
               </div>
-          <div class="demo-app-sidebar-section">                  
-                  <div class="demo-app-sidebar-section-child col-md-6">
+          <div class="calendar-app-sidebar-section">                  
+                  <div class="calendar-app-sidebar-section-child col-md-6">
                       <div class="form-group">
                         <label for="start_date">Start Date</label>
                         <input
@@ -159,17 +159,17 @@ export default {
                         >
                       </div>
                   </div>
-                  <div class="demo-app-sidebar-section-child col-md-6">
+                  <div class="calendar-app-sidebar-section-child col-md-6">
                       <div class=" form-group">
                         <label for="end_date">End Date</label>
                         <input type="date" id="end_date" class="form-control" v-model="newEvent.end_date">
                       </div>
                   </div>
-                  <div class=" demo-app-sidebar-section-child col-md-6 mb-4" v-if="addingMode">
+                  <div class=" calendar-app-sidebar-section-child col-md-6 mb-4" v-if="addingMode">
                     <button class="btn btn-sm btn-primary" @click="addNewEvent">Save Event</button>
                   </div>
             <template v-else>
-              <div class="demo-app-sidebar-section-child col-md-6 mb-4">
+              <div class="calendar-app-sidebar-section-child col-md-6 mb-4">
                 <button class="btn btn-sm btn-success" @click="updateEvent">Update</button>
                 <button class="btn btn-sm btn-danger" @click="deleteEvent">Delete</button>
                 <button class="btn btn-sm btn-secondary" @click="addingMode = !addingMode">Cancel</button>
@@ -179,7 +179,7 @@ export default {
 
         </form>
       </div>
-      <div class="demo-app-main">
+      <div class="calendar-app-main">
         <Fullcalendar @eventClick="showEvent" :plugins="calendarPlugins" 
         :selectable="true" :header="headerToolbar" @select="handleSelect" :events="events"/>
       </div>
@@ -203,26 +203,26 @@ export default {
   max-width: 1100px;
   margin: 0 auto;
 }
-.demo-app {
+.calendar-app {
   display: flex;
   min-height: 100%;
   font-family: Arial, Helvetica Neue, Helvetica, sans-serif;
   font-size: 14px;
 }
-.demo-app-main {
+.calendar-app-main {
   flex-grow: 1;
   padding: 3em;
 }
-.demo-app-sidebar {
+.calendar-app-sidebar {
   width: 300px;
   line-height: 1.5;
   background: #eaf9ff;
   border-right: 1px solid #d3e2e8;
 }
-.demo-app-sidebar-section {
+.calendar-app-sidebar-section {
   padding: 2em;
 }
-.demo-app-sidebar-section-child {
+.calendar-app-sidebar-section-child {
   height: 30px;
   /* width: 50%; */
 }
