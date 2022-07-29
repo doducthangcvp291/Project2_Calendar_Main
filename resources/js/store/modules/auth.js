@@ -1,6 +1,7 @@
 import { currentUser } from "../../helpers/auth";
 const user = currentUser();
 
+
 export default {
     state: {
         currentUser: user,

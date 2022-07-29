@@ -37,6 +37,7 @@ Route::group(['middleware' => 'api','namespace' => 'App\Http\Controllers','prefi
     //Route::resource('calendar', CalendarController::class);
     Route::get('/', 'CalendarController@index')->name('calendar.index');  
     Route::post('/', 'CalendarController@store')->name('calendar.store');
+    Route::put('/', 'CalendarController@update')->name('calendar.update');
     Route::delete('/{id}', 'CalendarController@destroy')->name('calendar.delete');      
 });    
 

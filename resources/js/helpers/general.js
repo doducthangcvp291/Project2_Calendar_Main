@@ -1,9 +1,9 @@
 // helpers/general.js
-export function initialize(store, router) {
+export function initialize(store, router) {//  reset state 
     router.beforeEach((to,from , next) => {
         const requiresAuth = to.matched.some(record => record.meta.requiresAuth);
         const currentUser = store.state.Auth.currentUser;
-        if ( requiresAuth && !currentUser) {
+        if ( requiresAuth && !currentUser) {//   check them ở đây về token hết hạn , check xem token con han ko thi ms cho dn .
             next('/login');
         } else if (to.path === '/login' && currentUser) {
             next('/');

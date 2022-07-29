@@ -1,6 +1,7 @@
 <script>
 import Fullcalendar from "@fullcalendar/vue";
 import dayGridPlugin from "@fullcalendar/daygrid";
+import timeGridPlugin from '@fullcalendar/timegrid'
 import interactionPlugin from "@fullcalendar/interaction";
 import axios from "axios";
 import { logout } from '../helpers/auth';
@@ -12,7 +13,12 @@ export default {
   },
   data() {
     return {
-      calendarPlugins: [dayGridPlugin, interactionPlugin],
+      calendarPlugins: [dayGridPlugin,timeGridPlugin,interactionPlugin],
+      headerToolbar: {
+      left: 'prev,next,today',
+      center: 'title',
+      right: 'dayGridMonth,timeGridWeek,timeGridDay'
+      },
       events: "",
       newEvent: {
         event_name: "",
@@ -28,6 +34,9 @@ export default {
   },
   //computed: mapGetters(['CURRENT_USER_ACCESS_TOKEN']),
   methods: {
+    handleSelect(selectInfo){
+      console.log('Select Info: ',selectInfo)
+    },
     addNewEvent() {
       axios
         .post("/api/calendar",{...this.newEvent },{ headers: { Authorization: 'Bearer '+ this.$store.state.Auth.currentUser.token } }, )
@@ -52,12 +61,14 @@ export default {
         end_date: end
       };
     },
+
     updateEvent() {
       axios
         .put("/api/calendar/" + this.indexToUpdate, {
           ...this.newEvent
         },{ headers: { Authorization: 'Bearer '+ this.$store.state.Auth.currentUser.token} })
-        .then(resp => {
+        .then(res => {
+          console.log("updated: ",res);
           this.resetForm();
           this.getEvents();
           this.addingMode = !this.addingMode;
@@ -103,7 +114,7 @@ export default {
       });
     },
 
-    userLogOut() {//cho vao button log out
+    userLogOut() {//cho vao button log out //reset cleanstate VueX when login
         this.$store.dispatch("LOGOUT");
 
         logout(this.$store.state.Auth.currentUser.token)// ham login ben help/auth
@@ -169,7 +180,8 @@ export default {
         </form>
       </div>
       <div class="demo-app-main">
-        <Fullcalendar @eventClick="showEvent" :plugins="calendarPlugins" :events="events"/>
+        <Fullcalendar @eventClick="showEvent" :plugins="calendarPlugins" 
+        :selectable="true" :header="headerToolbar" @select="handleSelect" :events="events"/>
       </div>
     
   </div>
@@ -180,6 +192,7 @@ export default {
 <style lang="css">
 @import "~@fullcalendar/core/main.css";
 @import "~@fullcalendar/daygrid/main.css";
+@import "~@fullcalendar/timegrid/main.css";
 /* .fc-title {
   color: #fff;
 }
