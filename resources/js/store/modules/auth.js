@@ -21,9 +21,6 @@ export default {
         },
         AUTH_ERROR: state => {
             return state.authError;
-        },
-        CURRENT_USER_ACCESS_TOKEN: state => {
-            return state.currentUser.token;
         }
     },
     mutations: {
@@ -47,7 +44,7 @@ export default {
             localStorage.removeItem('user');
             state.isLoggedIn = false;
             state.currentUser = null;
-        },
+        }
     },
     actions: {
         LOGIN: (context) => {
@@ -55,6 +52,6 @@ export default {
         },
         LOGOUT: (context) => {
             context.commit('LOGOUT');
-        }
+        } 
     }
 }

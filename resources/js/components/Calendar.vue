@@ -4,7 +4,7 @@ import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from '@fullcalendar/timegrid'
 import interactionPlugin from "@fullcalendar/interaction";
 import axios from "axios";
-import { logout } from '../helpers/auth';
+// import { logout } from '../helpers/auth';
 //import { mapGetters } from "vuex";
 export default {
   name: 'Calendar',
@@ -33,6 +33,7 @@ export default {
     this.getEvents();
   },
   //computed: mapGetters(['CURRENT_USER_ACCESS_TOKEN']),
+
   methods: {
     handleSelect(selectInfo){
       console.log('Select Info: ',selectInfo)
@@ -46,13 +47,15 @@ export default {
           this.resetForm(); // clear newEvent properties (e.g. title, start_date and end_date)
         })
         .catch(err =>
-          console.log("Unable to add new event!", err.response.data)
+          console.log("Unable to add new event!", err)
         );
     },
     showEvent(arg) {
       this.addingMode = false;
+      let arg_id = +arg.event.id;
+      console.log("arg_id :", arg.event);
       const { id, title, start, end } = this.events.find(
-        event => event.id === +arg.event.id
+        event => event.id === +arg_id
       );
       this.indexToUpdate = id;
       this.newEvent = {
@@ -115,19 +118,27 @@ export default {
     },
 
     userLogOut() {//cho vao button log out //reset cleanstate VueX when login
-        this.$store.dispatch("LOGOUT");
 
-        logout(this.$store.state.Auth.currentUser.token)// ham login ben help/auth
-            .then(res => {
-                console.log("res after LOGOUT:  ",res);
-                //this.$store.commit("LOGIN_SUCCESS", res);
-                this.$router.push({path: '/login'}).catch(()=>{});
-                //console.log("state after login : ",this.$store.state)
-            })
-            .catch(err => {
-                //this.$store.commit("LOGIN_FAILED", {err})
-                this.showAlert(this.authError, 'error');
-            })
+        // logout(this.$store.state.Auth.currentUser.token)// ham login ben help/auth
+        //     .then(res => {
+        //         console.log("res after LOGOUT:  ",res);
+        //         this.$router.push({path: '/login'}).catch(()=>{});
+        //     })
+        //     .catch(err => {
+        //         console.log("error log out:  ", err);
+        //     })
+
+        axios
+        .post('api/auth/logout', { headers: { Authorization: 'Bearer '+ this.$store.state.Auth.currentUser.token } }) // hoac header bearer token 
+        .then(result => {
+            console.log("result logout : ",result);
+            this.$router.push({path: '/login'}).catch(()=>{});
+        })
+        .catch(err => {
+            console.log("Error when logout: ",err);
+        })
+
+        this.$store.dispatch("LOGOUT");
     },
     
   },
@@ -139,8 +150,14 @@ export default {
 };
 </script>
 <template>
-  <div class="calendar-app">
-    
+<div>
+
+  <div class="fixed">
+      <nav class="top-bar" data-topbar role="navigation">
+        <button type="button" class="button"  @click="userLogOut">Log out</button>
+      </nav>
+  </div>
+  <div class="calendar-app">    
       <div class="calendar-app-sidebar">
         <form @submit.prevent class='calendar-app-sidebar-section'>
               <div class="calendar-app-sidebar-section ">
@@ -149,15 +166,15 @@ export default {
               </div>
           <div class="calendar-app-sidebar-section">                  
                   <div class="calendar-app-sidebar-section-child col-md-6">
-                      <div class="form-group">
-                        <label for="start_date">Start Date</label>
-                        <input
-                          type="date"
-                          id="start_date"
-                          class="form-control"
-                          v-model="newEvent.start_date"
-                        >
-                      </div>
+                        <div class="form-group">
+                          <label for="start_date">Start Date</label>
+                          <input
+                            type="date"
+                            id="start_date"
+                            class="form-control"
+                            v-model="newEvent.start_date"
+                          >
+                        </div>
                   </div>
                   <div class="calendar-app-sidebar-section-child col-md-6">
                       <div class=" form-group">
@@ -168,13 +185,13 @@ export default {
                   <div class=" calendar-app-sidebar-section-child col-md-6 mb-4" v-if="addingMode">
                     <button class="btn btn-sm btn-primary" @click="addNewEvent">Save Event</button>
                   </div>
-            <template v-else>
-              <div class="calendar-app-sidebar-section-child col-md-6 mb-4">
-                <button class="btn btn-sm btn-success" @click="updateEvent">Update</button>
-                <button class="btn btn-sm btn-danger" @click="deleteEvent">Delete</button>
-                <button class="btn btn-sm btn-secondary" @click="addingMode = !addingMode">Cancel</button>
-              </div>
-            </template>
+                  <template v-else>
+                    <div class="calendar-app-sidebar-section-child col-md-6 mb-4">
+                      <button class="btn btn-sm btn-success" @click="updateEvent">Update</button>
+                      <button class="btn btn-sm btn-danger" @click="deleteEvent">Delete</button>
+                      <button class="btn btn-sm btn-secondary" @click="addingMode = !addingMode">Cancel</button>
+                    </div>
+                  </template>
           </div>
 
         </form>
@@ -185,6 +202,7 @@ export default {
       </div>
     
   </div>
+</div>
 </template>
 
 
