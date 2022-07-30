@@ -33,7 +33,7 @@ export function register(credential) {
                 console.log("register send");
             })
             .catch(err => {
-                rej("Wrong email or password");
+                rej("Register error: ",err);
             })
     })
 }

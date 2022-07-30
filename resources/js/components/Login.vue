@@ -1,48 +1,88 @@
 <template>
-    <div class="col-md-8 offset-md-2 pt-100">
-        <div class="card">
-            <article class="card-body">
-                <a href="" class="float-right btn btn-outline-primary" @click.prevent="changeType('register')">Sign up</a>
-                <h4 class="card-title mb-4 mt-1">Sign in</h4>
-                <p>
-                    <a href="" class="btn btn-block btn-outline-info"> <i class="fa fa-twitter"></i>   Login via Twitter</a>
-                    <a href="" class="btn btn-block btn-outline-primary"> <i class="fa fa-facebook-f"></i>   Login via Facebook</a>
-                    <a href="" class="btn btn-block btn-outline-primary"> <i class="fa fa-google"></i>   Login via Gmail</a>
-                </p>
-                <hr>
+    <div >
+        <h2>Login Form</h2>
+        <button class="btn btn-sm btn-secondary" @click="loginOrRegister = !loginOrRegister">Register</button>
+            <div class="card" v-if="loginOrRegister">
+                <article class="card-body">
+
                 <form @submit.prevent="authenticate">
-                    <div class="form-group">
-                        <input name="" class="form-control" placeholder="Email or login" type="email" v-model="form.email">
-                    </div>
-                    <div class="form-group">
-                        <input class="form-control" placeholder="******" type="password" v-model="form.password">
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6">
+                        <div class="imgcontainer">
+                            <img src="./schedule.png" alt="Avatar" class="avatar">
+                        </div>
+
+                        <div class="container">
                             <div class="form-group">
-                                <button type="submit" class="btn btn-primary btn-block"> Login  </button>
+                                <label for="email"><b>Username</b></label>
+                                <input type="email" class="form-control" placeholder="Enter Email" name="email" v-model="form.email" required>
                             </div>
+                            <div class="form-group">
+                                <label for="password"><b>Password</b></label>
+                                <input type="password" class="form-control" placeholder="******" name="psw" v-model="form.password" required>
+                            </div>
+                            <div class="form-group">
+                                <button type="submit">Login</button>
+                            </div>
+                            <label>
+                            <input type="checkbox" checked="checked" name="remember"> Remember me
+                            </label>
                         </div>
-                        <div class="col-md-6 text-right">
-                            <a class="small" href="#">Forgot password?</a>
+
+                        <div class="container" style="background-color:#f1f1f1">
+                            <button type="button" class="cancelbtn">Cancel</button>
+                            <span class="psw">Forgot <a href="#">password?</a></span>
                         </div>
-                    </div>
                 </form>
-            </article>
+                </article>
         </div>
+        <template v-else>
+                <div  class="card">
+                    <article class="card-body">
+                        <form @submit.prevent="registerAc">
+                        <div class="imgcontainer">
+                            <img src="./schedule.png" alt="Avatar" class="avatar">
+                        </div>
+
+                        <div class="container">
+                            <div class="form-group">
+                                <label for="name"><b>Name</b></label>
+                                <input type="text" class="form-control" placeholder="Enter Your Name" name="name" v-model="form.name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="email"><b>Username</b></label>
+                                <input type="email" class="form-control" placeholder="Enter Email" name="email" v-model="form.email" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="password"><b>Password</b></label>
+                                <input type="password" class="form-control" placeholder="******" name="psw" v-model="form.password" required>
+                            </div>
+                            <div class="form-group">
+                                <div >
+                                    <button type="submit">Register</button>
+                                </div>
+                            </div>
+
+                        </div>
+                        </form>
+                    </article>
+                </div>
+        </template>
     </div>
 </template>
 
+
+
 <script>
-    import { login } from '../helpers/auth';
+    import { login , register } from '../helpers/auth';  
 
     export default {
         name: 'Login',
         data() {
             return {
+                loginOrRegister: true ,
                 form: {
                     email: '',
                     password: '',
+                    name: ''
                 },
                 type: 'login',
                 error: null,
@@ -64,6 +104,19 @@
                         this.showAlert(this.authError, 'error');
                     })
             },
+            registerAc(){
+                register(this.$data.form)
+                    .then(res => {
+                        console.log("res after register:  ",res);
+                        this.loginOrRegister = !this.loginOrRegister ;                        
+                        // this.$router.push({path: '/login'}).catch(()=>{});
+                        //console.log("state after login : ",this.$store.state)
+                    })
+                    .catch(err => {
+                        
+                        console.log('error register');
+                    })                
+            }
         },
         computed: {
             authError() {
@@ -72,7 +125,21 @@
         }
     }
 </script>
-<style type="text/css">
+<style>
+body {font-family: Arial, Helvetica, sans-serif;}
+form {border: 3px solid #f1f1f1;}
+
+
+
+input[type=email],[type=text], input[type=password] {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  /* display: inline-block; */
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+}
+
 button {
   background-color: #04AA6D;
   color: white;
@@ -82,32 +149,68 @@ button {
   cursor: pointer;
   width: 100%;
 }
+.form-group {
+    position: relative;
+}
+.center {
+  margin: 0;
+  position: relative;
+ top: 50%;
+  left: 50%;
+  /* right: 0px ;
+  bottom: 0px;  */
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+}
 
-button:hover {
+/* button:hover {
   opacity: 0.8;
-}
-input[type=email], input[type=password] {
-  width: 100%;
-  padding: 12px 20px;
-  margin: 8px 0;
-  display: inline-block;
-  border: 1px solid #ccc;
-  box-sizing: border-box;
-}
-.card {
-  padding: 16px;
-}
-.btn {
-  width: 100%;
-  padding: 10px;
-  border: none;
-  border-radius: 4px;
-  margin: 5px 0;
-  opacity: 0.85;
-  display: inline-block;
-  font-size: 15px;
-  line-height: 14px;
-  text-decoration: none; /* remove underline from anchors */
+} */
+
+.cancelbtn {
+  width: auto;
+  padding: 10px 18px;
+  background-color: #f44336;
 }
 
+.imgcontainer {
+  text-align: center;
+  /* display: block; */
+  margin-left: auto;
+  margin-right: auto;
+  width: 50%;    
+
+}
+
+/* .avatar {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 50%;
+} */
+
+img.avatar {
+  width: 40%;
+  border-radius: 50%;
+}
+
+/* .container {
+  padding: 16px;
+} */
+
+span.psw {
+  float: right;
+  padding-top: 16px;
+}
+
+/* Change styles for span and cancel button on extra small screens */
+@media screen and (max-width: 300px) {
+  span.psw {
+     display: block;
+     float: none;
+  }
+  .cancelbtn {
+     width: 100%;
+  }
+}
 </style>

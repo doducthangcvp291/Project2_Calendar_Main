@@ -16545,34 +16545,30 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     updateEvent: function updateEvent() {
       var _this2 = this;
 
-      // axios
-      //   .put("/api/calendar/" + this.indexToUpdate, {
-      //     ...this.newEvent
-      //   },{ headers: { Authorization: 'Bearer '+ this.$store.state.Auth.currentUser.token} })
-      //   .then(res => {
-      //     console.log("updated: ",res);
-      //     this.resetForm();
-      //     this.getEvents();
-      //     this.addingMode = !this.addingMode;
-      //   })
-      //   .catch(err =>
-      //     console.log("Unable to update event!", err.response.data)
-      //   );
-      axios__WEBPACK_IMPORTED_MODULE_4___default.a.post("/api/calendar", _objectSpread({}, this.newEvent), {
+      axios__WEBPACK_IMPORTED_MODULE_4___default.a.put("/api/calendar/" + this.indexToUpdate, _objectSpread({}, this.newEvent), {
         headers: {
           Authorization: 'Bearer ' + this.$store.state.Auth.currentUser.token
         }
-      }).then(function (data) {
-        console.log("data added : ", data);
+      }).then(function (res) {
+        console.log("updated: ", res);
 
-        _this2.getEvents(); // update our list of events
+        _this2.resetForm();
 
+        _this2.getEvents();
 
-        _this2.resetForm(); // clear newEvent properties (e.g. title, start_date and end_date)
-
+        _this2.addingMode = !_this2.addingMode;
       })["catch"](function (err) {
-        return console.log("Unable to add new event!", err);
-      });
+        return console.log("Unable to update event!", err.response.data);
+      }); // axios
+      // .post("/api/calendar",{...this.newEvent },{ headers: { Authorization: 'Bearer '+ this.$store.state.Auth.currentUser.token } }, )
+      // .then(data => {
+      //   console.log("data added : ",data);
+      //   this.getEvents(); // update our list of events
+      //   this.resetForm(); // clear newEvent properties (e.g. title, start_date and end_date)
+      // })
+      // .catch(err =>
+      //   console.log("Unable to add new event!", err)
+      // );
     },
     deleteEvent: function deleteEvent() {
       var _this3 = this;
@@ -16704,9 +16700,11 @@ __webpack_require__.r(__webpack_exports__);
   name: 'Login',
   data: function data() {
     return {
+      loginOrRegister: true,
       form: {
         email: '',
-        password: ''
+        password: '',
+        name: ''
       },
       type: 'login',
       error: null
@@ -16733,6 +16731,17 @@ __webpack_require__.r(__webpack_exports__);
         });
 
         _this.showAlert(_this.authError, 'error');
+      });
+    },
+    registerAc: function registerAc() {
+      var _this2 = this;
+
+      Object(_helpers_auth__WEBPACK_IMPORTED_MODULE_0__["register"])(this.$data.form).then(function (res) {
+        console.log("res after register:  ", res);
+        _this2.loginOrRegister = !_this2.loginOrRegister; // this.$router.push({path: '/login'}).catch(()=>{});
+        //console.log("state after login : ",this.$store.state)
+      })["catch"](function (err) {
+        console.log('error register');
       });
     }
   },
@@ -16788,23 +16797,24 @@ var render = function render() {
   var _vm = this,
       _c = _vm._self._c;
 
-  return _c("div", [_c("div", {
-    staticClass: "fixed"
-  }, [_c("nav", {
-    staticClass: "top-bar",
+  return _c("div", [_c("nav", {
+    staticClass: "navbar navbar-default",
     attrs: {
-      "data-topbar": "",
       role: "navigation"
     }
-  }, [_c("button", {
-    staticClass: "button",
+  }, [_c("div", {
+    staticClass: "navbar-header"
+  }, [_c("a", {
+    staticClass: "btn btn-default navbar-btn",
     attrs: {
       type: "button"
     },
     on: {
       click: _vm.userLogOut
     }
-  }, [_vm._v("Log out")])])]), _vm._v(" "), _c("div", {
+  }, [_c("span", {
+    staticClass: "glyphicon glyphicon-home"
+  }), _vm._v("Log out\r\n        ")])])]), _vm._v(" "), _c("div", {
     staticClass: "calendar-app"
   }, [_c("div", {
     staticClass: "calendar-app-sidebar"
@@ -16844,11 +16854,7 @@ var render = function render() {
         _vm.$set(_vm.newEvent, "event_name", $event.target.value);
       }
     }
-  })]), _vm._v(" "), _c("div", {
-    staticClass: "calendar-app-sidebar-section"
-  }, [_c("div", {
-    staticClass: "calendar-app-sidebar-section-child col-md-6"
-  }, [_c("div", {
+  }), _vm._v(" "), _c("div", {
     staticClass: "form-group"
   }, [_c("label", {
     attrs: {
@@ -16868,9 +16874,7 @@ var render = function render() {
       },
       expression: "newEvent.start_date"
     }
-  })], 1)]), _vm._v(" "), _c("div", {
-    staticClass: "calendar-app-sidebar-section-child col-md-6"
-  }, [_c("div", {
+  })], 1), _vm._v(" "), _c("div", {
     staticClass: "form-group"
   }, [_c("label", {
     attrs: {
@@ -16890,59 +16894,16 @@ var render = function render() {
       },
       expression: "newEvent.end_date"
     }
-  })], 1)]), _vm._v(" "), _vm.addingMode ? _c("div", {
+  })], 1), _vm._v(" "), _vm.addingMode ? _c("div", {
     staticClass: "calendar-app-sidebar-section-child col-md-6 mb-4"
   }, [_c("button", {
     staticClass: "btn btn-sm btn-primary",
     on: {
       click: _vm.addNewEvent
     }
-  }, [_vm._v("Save Event")]), _vm._v(" "), _c("label", {
-    attrs: {
-      "for": "end_date"
-    }
-  }, [_vm._v("Test Start Time")]), _vm._v(" "), _c("datepicker", {
-    attrs: {
-      lang: "en",
-      type: "time",
-      format: "HH:mm ",
-      "minute-step": 5
-    },
-    model: {
-      value: _vm.start_time,
-      callback: function callback($$v) {
-        _vm.start_time = $$v;
-      },
-      expression: "start_time"
-    }
-  }), _vm._v(" "), _c("button", {
-    staticClass: "button",
-    attrs: {
-      type: "button"
-    },
-    on: {
-      click: _vm.testTimePicker
-    }
-  }, [_vm._v("ButtonTimePick")])], 1) : [_c("div", {
+  }, [_vm._v("Save Event")])]) : [_c("div", {
     staticClass: "calendar-app-sidebar-section-child col-md-6 mb-4"
-  }, [_c("label", {
-    attrs: {
-      "for": "end_date"
-    }
-  }, [_vm._v("Test Start Time")]), _vm._v(" "), _c("datetime", {
-    staticClass: "form-control",
-    attrs: {
-      id: "start_time",
-      format: "H:i:s"
-    },
-    model: {
-      value: _vm.start_time,
-      callback: function callback($$v) {
-        _vm.start_time = $$v;
-      },
-      expression: "start_time"
-    }
-  }), _vm._v(" "), _c("button", {
+  }, [_c("button", {
     staticClass: "btn btn-sm btn-success",
     on: {
       click: _vm.updateEvent
@@ -16959,7 +16920,7 @@ var render = function render() {
         _vm.addingMode = !_vm.addingMode;
       }
     }
-  }, [_vm._v("Cancel")])], 1)]], 2)])]), _vm._v(" "), _c("div", {
+  }, [_vm._v("Cancel")])])]], 2)])]), _vm._v(" "), _c("div", {
     staticClass: "calendar-app-main"
   }, [_c("Fullcalendar", {
     attrs: {
@@ -16996,35 +16957,29 @@ var render = function render() {
   var _vm = this,
       _c = _vm._self._c;
 
-  return _c("div", {
-    staticClass: "col-md-8 offset-md-2 pt-100"
-  }, [_c("div", {
+  return _c("div", [_c("h2", [_vm._v("Login Form")]), _vm._v(" "), _c("button", {
+    staticClass: "btn btn-sm btn-secondary",
+    on: {
+      click: function click($event) {
+        _vm.loginOrRegister = !_vm.loginOrRegister;
+      }
+    }
+  }, [_vm._v("Register")]), _vm._v(" "), _vm.loginOrRegister ? _c("div", {
     staticClass: "card"
   }, [_c("article", {
     staticClass: "card-body"
-  }, [_c("a", {
-    staticClass: "float-right btn btn-outline-primary",
-    attrs: {
-      href: ""
-    },
-    on: {
-      click: function click($event) {
-        $event.preventDefault();
-        return _vm.changeType("register");
-      }
-    }
-  }, [_vm._v("Sign up")]), _vm._v(" "), _c("h4", {
-    staticClass: "card-title mb-4 mt-1"
-  }, [_vm._v("Sign in")]), _vm._v(" "), _vm._m(0), _vm._v(" "), _c("hr"), _vm._v(" "), _c("form", {
+  }, [_c("form", {
     on: {
       submit: function submit($event) {
         $event.preventDefault();
         return _vm.authenticate.apply(null, arguments);
       }
     }
+  }, [_vm._m(0), _vm._v(" "), _c("div", {
+    staticClass: "container"
   }, [_c("div", {
     staticClass: "form-group"
-  }, [_c("input", {
+  }, [_vm._m(1), _vm._v(" "), _c("input", {
     directives: [{
       name: "model",
       rawName: "v-model",
@@ -17033,9 +16988,10 @@ var render = function render() {
     }],
     staticClass: "form-control",
     attrs: {
-      name: "",
-      placeholder: "Email or login",
-      type: "email"
+      type: "email",
+      placeholder: "Enter Email",
+      name: "email",
+      required: ""
     },
     domProps: {
       value: _vm.form.email
@@ -17049,7 +17005,7 @@ var render = function render() {
     }
   })]), _vm._v(" "), _c("div", {
     staticClass: "form-group"
-  }, [_c("input", {
+  }, [_vm._m(2), _vm._v(" "), _c("input", {
     directives: [{
       name: "model",
       rawName: "v-model",
@@ -17058,8 +17014,10 @@ var render = function render() {
     }],
     staticClass: "form-control",
     attrs: {
+      type: "password",
       placeholder: "******",
-      type: "password"
+      name: "psw",
+      required: ""
     },
     domProps: {
       value: _vm.form.password
@@ -17071,58 +17029,225 @@ var render = function render() {
         _vm.$set(_vm.form, "password", $event.target.value);
       }
     }
-  })]), _vm._v(" "), _vm._m(1)])])])]);
+  })]), _vm._v(" "), _vm._m(3), _vm._v(" "), _vm._m(4)]), _vm._v(" "), _vm._m(5)])])]) : [_c("div", {
+    staticClass: "card"
+  }, [_c("article", {
+    staticClass: "card-body"
+  }, [_c("form", {
+    on: {
+      submit: function submit($event) {
+        $event.preventDefault();
+        return _vm.registerAc.apply(null, arguments);
+      }
+    }
+  }, [_vm._m(6), _vm._v(" "), _c("div", {
+    staticClass: "container"
+  }, [_c("div", {
+    staticClass: "form-group"
+  }, [_vm._m(7), _vm._v(" "), _c("input", {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: _vm.form.name,
+      expression: "form.name"
+    }],
+    staticClass: "form-control",
+    attrs: {
+      type: "text",
+      placeholder: "Enter Your Name",
+      name: "name",
+      required: ""
+    },
+    domProps: {
+      value: _vm.form.name
+    },
+    on: {
+      input: function input($event) {
+        if ($event.target.composing) return;
+
+        _vm.$set(_vm.form, "name", $event.target.value);
+      }
+    }
+  })]), _vm._v(" "), _c("div", {
+    staticClass: "form-group"
+  }, [_vm._m(8), _vm._v(" "), _c("input", {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: _vm.form.email,
+      expression: "form.email"
+    }],
+    staticClass: "form-control",
+    attrs: {
+      type: "email",
+      placeholder: "Enter Email",
+      name: "email",
+      required: ""
+    },
+    domProps: {
+      value: _vm.form.email
+    },
+    on: {
+      input: function input($event) {
+        if ($event.target.composing) return;
+
+        _vm.$set(_vm.form, "email", $event.target.value);
+      }
+    }
+  })]), _vm._v(" "), _c("div", {
+    staticClass: "form-group"
+  }, [_vm._m(9), _vm._v(" "), _c("input", {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: _vm.form.password,
+      expression: "form.password"
+    }],
+    staticClass: "form-control",
+    attrs: {
+      type: "password",
+      placeholder: "******",
+      name: "psw",
+      required: ""
+    },
+    domProps: {
+      value: _vm.form.password
+    },
+    on: {
+      input: function input($event) {
+        if ($event.target.composing) return;
+
+        _vm.$set(_vm.form, "password", $event.target.value);
+      }
+    }
+  })]), _vm._v(" "), _vm._m(10)])])])])]], 2);
 };
 
 var staticRenderFns = [function () {
   var _vm = this,
       _c = _vm._self._c;
 
-  return _c("p", [_c("a", {
-    staticClass: "btn btn-block btn-outline-info",
+  return _c("div", {
+    staticClass: "imgcontainer"
+  }, [_c("img", {
+    staticClass: "avatar",
     attrs: {
-      href: ""
+      src: __webpack_require__(/*! ./schedule.png */ "./resources/js/components/schedule.png"),
+      alt: "Avatar"
     }
-  }, [_c("i", {
-    staticClass: "fa fa-twitter"
-  }), _vm._v("   Login via Twitter")]), _vm._v(" "), _c("a", {
-    staticClass: "btn btn-block btn-outline-primary",
+  })]);
+}, function () {
+  var _vm = this,
+      _c = _vm._self._c;
+
+  return _c("label", {
     attrs: {
-      href: ""
+      "for": "email"
     }
-  }, [_c("i", {
-    staticClass: "fa fa-facebook-f"
-  }), _vm._v("   Login via Facebook")]), _vm._v(" "), _c("a", {
-    staticClass: "btn btn-block btn-outline-primary",
+  }, [_c("b", [_vm._v("Username")])]);
+}, function () {
+  var _vm = this,
+      _c = _vm._self._c;
+
+  return _c("label", {
     attrs: {
-      href: ""
+      "for": "password"
     }
-  }, [_c("i", {
-    staticClass: "fa fa-google"
-  }), _vm._v("   Login via Gmail")])]);
+  }, [_c("b", [_vm._v("Password")])]);
 }, function () {
   var _vm = this,
       _c = _vm._self._c;
 
   return _c("div", {
-    staticClass: "row"
-  }, [_c("div", {
-    staticClass: "col-md-6"
-  }, [_c("div", {
     staticClass: "form-group"
   }, [_c("button", {
-    staticClass: "btn btn-primary btn-block",
     attrs: {
       type: "submit"
     }
-  }, [_vm._v(" Login  ")])])]), _vm._v(" "), _c("div", {
-    staticClass: "col-md-6 text-right"
-  }, [_c("a", {
-    staticClass: "small",
+  }, [_vm._v("Login")])]);
+}, function () {
+  var _vm = this,
+      _c = _vm._self._c;
+
+  return _c("label", [_c("input", {
+    attrs: {
+      type: "checkbox",
+      checked: "checked",
+      name: "remember"
+    }
+  }), _vm._v(" Remember me\n                        ")]);
+}, function () {
+  var _vm = this,
+      _c = _vm._self._c;
+
+  return _c("div", {
+    staticClass: "container",
+    staticStyle: {
+      "background-color": "#f1f1f1"
+    }
+  }, [_c("button", {
+    staticClass: "cancelbtn",
+    attrs: {
+      type: "button"
+    }
+  }, [_vm._v("Cancel")]), _vm._v(" "), _c("span", {
+    staticClass: "psw"
+  }, [_vm._v("Forgot "), _c("a", {
     attrs: {
       href: "#"
     }
-  }, [_vm._v("Forgot password?")])])]);
+  }, [_vm._v("password?")])])]);
+}, function () {
+  var _vm = this,
+      _c = _vm._self._c;
+
+  return _c("div", {
+    staticClass: "imgcontainer"
+  }, [_c("img", {
+    staticClass: "avatar",
+    attrs: {
+      src: __webpack_require__(/*! ./schedule.png */ "./resources/js/components/schedule.png"),
+      alt: "Avatar"
+    }
+  })]);
+}, function () {
+  var _vm = this,
+      _c = _vm._self._c;
+
+  return _c("label", {
+    attrs: {
+      "for": "name"
+    }
+  }, [_c("b", [_vm._v("Name")])]);
+}, function () {
+  var _vm = this,
+      _c = _vm._self._c;
+
+  return _c("label", {
+    attrs: {
+      "for": "email"
+    }
+  }, [_c("b", [_vm._v("Username")])]);
+}, function () {
+  var _vm = this,
+      _c = _vm._self._c;
+
+  return _c("label", {
+    attrs: {
+      "for": "password"
+    }
+  }, [_c("b", [_vm._v("Password")])]);
+}, function () {
+  var _vm = this,
+      _c = _vm._self._c;
+
+  return _c("div", {
+    staticClass: "form-group"
+  }, [_c("div", [_c("button", {
+    attrs: {
+      type: "submit"
+    }
+  }, [_vm._v("Register")])])]);
 }];
 render._withStripped = true;
 
@@ -17220,7 +17345,7 @@ exports.i(__webpack_require__(/*! -!../../../node_modules/css-loader??ref--6-1!.
 exports.i(__webpack_require__(/*! -!../../../node_modules/css-loader??ref--6-1!../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!vue2-datepicker/index.css */ "./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/vue2-datepicker/index.css"), "");
 
 // module
-exports.push([module.i, "\n/* .fc-title {\r\n  color: #fff;\r\n}\r\n.fc-title:hover {\r\n  cursor: pointer;\r\n} */\n.fc { /* the calendar root */\r\n  max-width: 1100px;\r\n  margin: 0 auto;\n}\n.calendar-app {\r\n  display: flex;\r\n  min-height: 100%;\r\n  font-family: Arial, Helvetica Neue, Helvetica, sans-serif;\r\n  font-size: 14px;\n}\n.calendar-app-main {\r\n  flex-grow: 1;\r\n  padding: 3em;\n}\n.calendar-app-sidebar {\r\n  width: 300px;\r\n  line-height: 1.5;\r\n  background: #eaf9ff;\r\n  border-right: 1px solid #d3e2e8;\n}\n.calendar-app-sidebar-section {\r\n  padding: 2em;\n}\n.calendar-app-sidebar-section-child {\r\n  height: 30px;\r\n  /* width: 50%; */\n}\r\n\r\n", ""]);
+exports.push([module.i, "\n/* .fc-title {\r\n  color: #fff;\r\n}\r\n.fc-title:hover {\r\n  cursor: pointer;\r\n} */\n.fc { /* the calendar root */\r\n  max-width: 1100px;\r\n  margin: 0 auto;\n}\n.calendar-app {\r\n  display: flex;\r\n  min-height: 100%;\r\n  font-family: Arial, Helvetica Neue, Helvetica, sans-serif;\r\n  font-size: 14px;\n}\n.calendar-app-main {\r\n  flex-grow: 1;\r\n  padding: 3em;\n}\n.calendar-app-sidebar {\r\n  width: 300px;\r\n  line-height: 1.5;\r\n  background: #eaf9ff;\r\n  border-right: 1px solid #d3e2e8;\n}\n.calendar-app-sidebar-section {\r\n  padding: 2em;\n}\n.calendar-app-sidebar-section-child {\r\n  height: 30px;\r\n \r\n \r\n  /* width: 50%; */\n}\n.btn {\r\n  border-radius: 10px;\n}\n#event_name {\r\n  padding: 10px;\r\n  width: 225px;\r\n  /* border-radius: 5px; */\n}\n.navbar-header{\r\n  margin-left:5px;\r\n  width:100%;\n}\r\n\r\n\r\n", ""]);
 
 // exports
 
@@ -17239,7 +17364,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\nbutton {\r\n  background-color: #04AA6D;\r\n  color: white;\r\n  padding: 14px 20px;\r\n  margin: 8px 0;\r\n  border: none;\r\n  cursor: pointer;\r\n  width: 100%;\n}\nbutton:hover {\r\n  opacity: 0.8;\n}\ninput[type=email], input[type=password] {\r\n  width: 100%;\r\n  padding: 12px 20px;\r\n  margin: 8px 0;\r\n  display: inline-block;\r\n  border: 1px solid #ccc;\r\n  box-sizing: border-box;\n}\n.card {\r\n  padding: 16px;\n}\n.btn {\r\n  width: 100%;\r\n  padding: 10px;\r\n  border: none;\r\n  border-radius: 4px;\r\n  margin: 5px 0;\r\n  opacity: 0.85;\r\n  display: inline-block;\r\n  font-size: 15px;\r\n  line-height: 14px;\r\n  text-decoration: none; /* remove underline from anchors */\n}\r\n\r\n", ""]);
+exports.push([module.i, "\nbody {font-family: Arial, Helvetica, sans-serif;}\nform {border: 3px solid #f1f1f1;}\ninput[type=email],[type=text], input[type=password] {\r\n  width: 100%;\r\n  padding: 12px 20px;\r\n  margin: 8px 0;\r\n  /* display: inline-block; */\r\n  border: 1px solid #ccc;\r\n  box-sizing: border-box;\n}\nbutton {\r\n  background-color: #04AA6D;\r\n  color: white;\r\n  padding: 14px 20px;\r\n  margin: 8px 0;\r\n  border: none;\r\n  cursor: pointer;\r\n  width: 100%;\n}\n.form-group {\r\n    position: relative;\n}\n.center {\r\n  margin: 0;\r\n  position: relative;\r\n top: 50%;\r\n  left: 50%;\r\n  /* right: 0px ;\r\n  bottom: 0px;  */\r\n  -ms-transform: translate(-50%, -50%);\r\n  transform: translate(-50%, -50%);\n}\r\n\r\n/* button:hover {\r\n  opacity: 0.8;\r\n} */\n.cancelbtn {\r\n  width: auto;\r\n  padding: 10px 18px;\r\n  background-color: #f44336;\n}\n.imgcontainer {\r\n  text-align: center;\r\n  /* display: block; */\r\n  margin-left: auto;\r\n  margin-right: auto;\r\n  width: 50%;\n}\r\n\r\n/* .avatar {\r\n  display: block;\r\n  margin-left: auto;\r\n  margin-right: auto;\r\n  width: 50%;\r\n} */\nimg.avatar {\r\n  width: 40%;\r\n  border-radius: 50%;\n}\r\n\r\n/* .container {\r\n  padding: 16px;\r\n} */\nspan.psw {\r\n  float: right;\r\n  padding-top: 16px;\n}\r\n\r\n/* Change styles for span and cancel button on extra small screens */\n@media screen and (max-width: 300px) {\nspan.psw {\r\n     display: block;\r\n     float: none;\n}\n.cancelbtn {\r\n     width: 100%;\n}\n}\r\n", ""]);
 
 // exports
 
@@ -59756,6 +59881,17 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./resources/js/components/schedule.png":
+/*!**********************************************!*\
+  !*** ./resources/js/components/schedule.png ***!
+  \**********************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "/images/schedule.png?63274553459184d87ce1281905d11db4";
+
+/***/ }),
+
 /***/ "./resources/js/helpers/auth.js":
 /*!**************************************!*\
   !*** ./resources/js/helpers/auth.js ***!
@@ -59802,7 +59938,7 @@ function register(credential) {
       res(result.data);
       console.log("register send");
     })["catch"](function (err) {
-      rej("Wrong email or password");
+      rej("Register error: ", err);
     });
   });
 }

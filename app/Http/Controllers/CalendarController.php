@@ -41,11 +41,11 @@ class CalendarController extends Controller
     public function store(Request $request)
     {
         $user  = auth()->user();
-        //$new_calendar = Calendar::create(array_merge($request->all(),['user_id' => $user->id]));
-        $new_test_event = TestEvent::create((array_merge($request->all(),['user_id' => $user->id])));
+        $new_calendar = Calendar::create(array_merge($request->all(),['user_id' => $user->id]));
+        //$new_test_event = TestEvent::create((array_merge($request->all(),['user_id' => $user->id])));
         return response()->json([
-            // 'data' => new CalendarResource($new_calendar),
-            'test_event_create_done' => $new_test_event,
+            'data' => new CalendarResource($new_calendar),
+            //'test_event_create_done' => $new_test_event,
             'message' => 'Successfully added new event!',
             'status' => Response::HTTP_CREATED
         ]);
@@ -80,11 +80,11 @@ class CalendarController extends Controller
      * @param  \App\Models\Calendar  $calendar
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Calendar $calendar)
+    public function update(Request $request)
     {
-        $calendar->update($request->all());
+        Calendar::where('id', $request->id)->update($request->all());
         return response()->json([
-            'data' => new CalendarResource($calendar),
+            //'data' => new CalendarResource($calendar),
             'message' => 'Successfully updated event!',
             'status' => Response::HTTP_ACCEPTED
         ]);

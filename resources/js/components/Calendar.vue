@@ -92,31 +92,31 @@ export default {
     },
 
     updateEvent() {
-      // axios
-      //   .put("/api/calendar/" + this.indexToUpdate, {
-      //     ...this.newEvent
-      //   },{ headers: { Authorization: 'Bearer '+ this.$store.state.Auth.currentUser.token} })
-      //   .then(res => {
-      //     console.log("updated: ",res);
-      //     this.resetForm();
-      //     this.getEvents();
-      //     this.addingMode = !this.addingMode;
-      //   })
-      //   .catch(err =>
-      //     console.log("Unable to update event!", err.response.data)
-      //   );
-        
-
-        axios
-        .post("/api/calendar",{...this.newEvent },{ headers: { Authorization: 'Bearer '+ this.$store.state.Auth.currentUser.token } }, )
-        .then(data => {
-          console.log("data added : ",data);
-          this.getEvents(); // update our list of events
-          this.resetForm(); // clear newEvent properties (e.g. title, start_date and end_date)
+      axios
+        .put("/api/calendar/" + this.indexToUpdate, {
+          ...this.newEvent
+        },{ headers: { Authorization: 'Bearer '+ this.$store.state.Auth.currentUser.token} })
+        .then(res => {
+          console.log("updated: ",res);
+          this.resetForm();
+          this.getEvents();
+          this.addingMode = !this.addingMode;
         })
         .catch(err =>
-          console.log("Unable to add new event!", err)
+          console.log("Unable to update event!", err.response.data)
         );
+        
+
+        // axios
+        // .post("/api/calendar",{...this.newEvent },{ headers: { Authorization: 'Bearer '+ this.$store.state.Auth.currentUser.token } }, )
+        // .then(data => {
+        //   console.log("data added : ",data);
+        //   this.getEvents(); // update our list of events
+        //   this.resetForm(); // clear newEvent properties (e.g. title, start_date and end_date)
+        // })
+        // .catch(err =>
+        //   console.log("Unable to add new event!", err)
+        // );
     },
     deleteEvent() {
       axios
@@ -195,39 +195,41 @@ export default {
 <template>
 <div>
 
-  <div class="fixed">
+  <!-- <div class="fixed">
       <nav class="top-bar" data-topbar role="navigation">
-        <button type="button" class="button"  @click="userLogOut">Log out</button>
+        <button type="button" class="btn btn-sm btn-primary"  @click="userLogOut">Log out</button>
       </nav>
-  </div>
+  </div> -->
+  <nav class="navbar navbar-default" role="navigation">
+      <div class="navbar-header">
+        <a  type="button" class="btn btn-default navbar-btn" @click="userLogOut">
+          <span class="glyphicon glyphicon-home"></span>Log out
+        </a>
+        
+        <!-- <a  href="#" type="button" class="btn btn-default navbar-btn pull-right">
+          <span class="glyphicon glyphicon-shopping-cart"></span>Cart
+        </a> -->
+      </div>
+  </nav>
   <div class="calendar-app">    
       <div class="calendar-app-sidebar">
         <form @submit.prevent class='calendar-app-sidebar-section'>
-                  <div class="calendar-app-sidebar-section ">
-                          <label for="event_name">Event Name</label>
-                          <input type="text" id="event_name" class="form-control" v-model="newEvent.event_name" required>
-                  </div>
-                <div class="calendar-app-sidebar-section">                  
-                              <div class="calendar-app-sidebar-section-child col-md-6">
+   
+                <div class="calendar-app-sidebar-section">  
+                             
+                                          <label for="event_name">Event Name</label>
+                                          <input type="text" id="event_name" class="form-control" v-model="newEvent.event_name" required>
+                                             
+                              
                                             <div class="form-group">
                                               <label for="start_date">Start Date</label>
-                                              <!-- <input
-                                                type="date"
-                                                id="start_date"
-                                                class="form-control"
-                                                v-model="newEvent.start_date"
-                                              > -->
                                                 <datetime
                                                   id="start_date"
                                                   class="form-control" 
                                                   v-model="newEvent.start_date" 
                                                   format = "YYYY-MM-DD H:i:s" required                                                                                 
                                                 />                          
-                                            </div>                     
-
-                              </div>
-                        
-                              <div class="calendar-app-sidebar-section-child col-md-6">
+                                            </div>               
                                   <div class=" form-group">
                                     <label for="end_date">End Date</label>
                                     <!-- <input type="date" id="end_date" class="form-control" v-model="newEvent.end_date"/> -->
@@ -238,38 +240,16 @@ export default {
                                           format = "YYYY-MM-DD H:i:s" required                                                                                 
                                         />
                                   </div>
-                              </div>
+                              
 
                               <div class=" calendar-app-sidebar-section-child col-md-6 mb-4" v-if="addingMode">
                                 <button class="btn btn-sm btn-primary" @click="addNewEvent">Save Event</button>
-                                <label for="end_date">Test Start Time</label>
-                                <datepicker 
-                                        v-model="start_time" 
-                                        lang="en"
-                                        type="time"
-                                        format="HH:mm " :minute-step="5"                            
-                                />
-                                <!-- <label for="end_date">Test Time Picker</label>
-                                <datetime 
-                                        v-model="test_timepicker" 
-                                        format = "YYYY-MM-DD h:i:s"                                                                                  
-                                /> -->
-                                <button type="button" class="button"  @click="testTimePicker">ButtonTimePick</button>
-                              </div>
-                        
+                              </div>                      
                                       
                         
                               <template v-else>
                                 <div class="calendar-app-sidebar-section-child col-md-6 mb-4">
-                                <label for="end_date">Test Start Time</label>
-                                <!-- <input type="time" v-model="start_time">
-                                 -->
-                                 <datetime 
-                                          id="start_time"
-                                          class="form-control" 
-                                          v-model="start_time" 
-                                          format = "H:i:s"                                                                                 
-                                        />
+
                                   <button class="btn btn-sm btn-success" @click="updateEvent">Update</button>
                                   <button class="btn btn-sm btn-danger" @click="deleteEvent">Delete</button>
                                   <button class="btn btn-sm btn-secondary" @click="addingMode = !addingMode">Cancel</button>
@@ -323,10 +303,28 @@ export default {
 }
 .calendar-app-sidebar-section {
   padding: 2em;
-}
+} 
 .calendar-app-sidebar-section-child {
   height: 30px;
+ 
+ 
   /* width: 50%; */
 }
+.btn {
+  border-radius: 10px;
+
+}
+#event_name {
+  padding: 10px;
+  width: 225px;
+  /* border-radius: 5px; */
+
+}
+
+.navbar-header{
+  margin-left:5px;
+  width:100%;
+}
+
 
 </style>
