@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Models;
+
 use Tymon\JWTAuth\Contracts\JWTSubject;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -35,6 +36,11 @@ class User extends Authenticatable implements JWTSubject
     public function calendar()
     {
         return $this->hasMany(Calendar::class);
+    }
+
+    public function test_event()
+    {
+        return $this->hasMany(TestEvent::class);
     }
 
     /**

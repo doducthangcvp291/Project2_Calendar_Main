@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Calendar;
+use App\Models\TestEvent;
 use Illuminate\Http\Request;
 use App\Http\Resources\CalendarResource;
 use Symfony\Component\HttpFoundation\Response;
@@ -40,9 +41,11 @@ class CalendarController extends Controller
     public function store(Request $request)
     {
         $user  = auth()->user();
-        $new_calendar = Calendar::create(array_merge($request->all(),['user_id' => $user->id]));
+        //$new_calendar = Calendar::create(array_merge($request->all(),['user_id' => $user->id]));
+        $new_test_event = TestEvent::create((array_merge($request->all(),['user_id' => $user->id])));
         return response()->json([
-            'data' => new CalendarResource($new_calendar),
+            // 'data' => new CalendarResource($new_calendar),
+            'test_event_create_done' => $new_test_event,
             'message' => 'Successfully added new event!',
             'status' => Response::HTTP_CREATED
         ]);
@@ -93,9 +96,9 @@ class CalendarController extends Controller
      * @param  \App\Models\Calendar  $calendar
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Calendar $calendar)
+    public function destroy(Request $request)
     {
-        $calendar->delete();
+        Calendar::destroy($request->id);
         return response('Event removed successfully!', Response::HTTP_NO_CONTENT);
     }
 }
