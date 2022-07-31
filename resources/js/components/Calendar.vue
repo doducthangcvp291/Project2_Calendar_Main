@@ -34,11 +34,6 @@ export default {
       start_time:"",
       end_time:"",
       test_timepicker:"",
-      addEvent: {
-        event_name : "",
-        time_start_display : "",
-        time_end_display: "",        
-      }
 
     };
   },
@@ -68,27 +63,18 @@ export default {
     showEvent(arg) {
       this.addingMode = false;
       let arg_id = +arg.event.id;
-      console.log("arg event :", arg.event);
+      
       const ObjTime = this.events.find(
         event => event.id === +arg_id
       );
       const { id, title, start, end } = ObjTime;
-      const TestTimeObject = arg.event.start 
-      const startTime = start.slice(11,16);
-      // console.log("startTime ",startTime)
-      if ( startTime.length > 1 ){
-        this.start_time = startTime ;
-      }
+
       this.indexToUpdate = id;
       this.newEvent = {
         event_name: title,
-        // start_date: start.slice(0,10),
-        // end_date: end.slice(0,10)
         start_date: start,
         end_date: end
       };
-      this.addEvent.time_start_display = start.slice(0,10) ,
-      this.addEvent.time_end_display = end.slice(0,10)
     },
 
     updateEvent() {
@@ -106,17 +92,6 @@ export default {
           console.log("Unable to update event!", err.response.data)
         );
         
-
-        // axios
-        // .post("/api/calendar",{...this.newEvent },{ headers: { Authorization: 'Bearer '+ this.$store.state.Auth.currentUser.token } }, )
-        // .then(data => {
-        //   console.log("data added : ",data);
-        //   this.getEvents(); // update our list of events
-        //   this.resetForm(); // clear newEvent properties (e.g. title, start_date and end_date)
-        // })
-        // .catch(err =>
-        //   console.log("Unable to add new event!", err)
-        // );
     },
     deleteEvent() {
       axios
@@ -154,7 +129,6 @@ export default {
       Object.keys(this.newEvent).forEach(key => {
         return (this.newEvent[key] = "");
       });
-      console.log("done reset form")
     },
     testTimePicker() {
       console.log(" Time Picker: ",this.test_timepicker)
@@ -217,19 +191,19 @@ export default {
    
                 <div class="calendar-app-sidebar-section">  
                              
-                                          <label for="event_name">Event Name</label>
-                                          <input type="text" id="event_name" class="form-control" v-model="newEvent.event_name" required>
-                                             
-                              
-                                            <div class="form-group">
-                                              <label for="start_date">Start Date</label>
-                                                <datetime
-                                                  id="start_date"
-                                                  class="form-control" 
-                                                  v-model="newEvent.start_date" 
-                                                  format = "YYYY-MM-DD H:i:s" required                                                                                 
-                                                />                          
-                                            </div>               
+                                  <label for="event_name">Event Name</label>
+                                  <input type="text" id="event_name" class="form-control" v-model="newEvent.event_name" >
+                                      
+                      
+                                  <div class="form-group">
+                                    <label for="start_date">Start Date</label>
+                                      <datetime
+                                        id="start_date"
+                                        class="form-control" 
+                                        v-model="newEvent.start_date" 
+                                        format = "YYYY-MM-DD H:i:s" required                                                                                 
+                                      />                          
+                                  </div>               
                                   <div class=" form-group">
                                     <label for="end_date">End Date</label>
                                     <!-- <input type="date" id="end_date" class="form-control" v-model="newEvent.end_date"/> -->
@@ -250,9 +224,9 @@ export default {
                               <template v-else>
                                 <div class="calendar-app-sidebar-section-child col-md-6 mb-4">
 
-                                  <button class="btn btn-sm btn-success" @click="updateEvent">Update</button>
-                                  <button class="btn btn-sm btn-danger" @click="deleteEvent">Delete</button>
-                                  <button class="btn btn-sm btn-secondary" @click="addingMode = !addingMode">Cancel</button>
+                                  <button class="btn btn-sm btn-success" @click="updateEvent(),resetForm()">Update</button>
+                                  <button class="btn btn-sm btn-danger" @click="deleteEvent(),resetForm()">Delete</button>
+                                  <button class="btn btn-sm btn-secondary" @click="addingMode = !addingMode , resetForm()">Cancel</button>
                                 </div>
                               </template>
                 </div>

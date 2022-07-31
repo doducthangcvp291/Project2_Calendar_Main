@@ -16477,12 +16477,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       indexToUpdate: "",
       start_time: "",
       end_time: "",
-      test_timepicker: "",
-      addEvent: {
-        event_name: "",
-        time_start_display: "",
-        time_end_display: ""
-      }
+      test_timepicker: ""
     };
   },
   created: function created() {
@@ -16517,7 +16512,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     showEvent: function showEvent(arg) {
       this.addingMode = false;
       var arg_id = +arg.event.id;
-      console.log("arg event :", arg.event);
       var ObjTime = this.events.find(function (event) {
         return event.id === +arg_id;
       });
@@ -16525,22 +16519,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           title = ObjTime.title,
           start = ObjTime.start,
           end = ObjTime.end;
-      var TestTimeObject = arg.event.start;
-      var startTime = start.slice(11, 16); // console.log("startTime ",startTime)
-
-      if (startTime.length > 1) {
-        this.start_time = startTime;
-      }
-
       this.indexToUpdate = id;
       this.newEvent = {
         event_name: title,
-        // start_date: start.slice(0,10),
-        // end_date: end.slice(0,10)
         start_date: start,
         end_date: end
       };
-      this.addEvent.time_start_display = start.slice(0, 10), this.addEvent.time_end_display = end.slice(0, 10);
     },
     updateEvent: function updateEvent() {
       var _this2 = this;
@@ -16559,16 +16543,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         _this2.addingMode = !_this2.addingMode;
       })["catch"](function (err) {
         return console.log("Unable to update event!", err.response.data);
-      }); // axios
-      // .post("/api/calendar",{...this.newEvent },{ headers: { Authorization: 'Bearer '+ this.$store.state.Auth.currentUser.token } }, )
-      // .then(data => {
-      //   console.log("data added : ",data);
-      //   this.getEvents(); // update our list of events
-      //   this.resetForm(); // clear newEvent properties (e.g. title, start_date and end_date)
-      // })
-      // .catch(err =>
-      //   console.log("Unable to add new event!", err)
-      // );
+      });
     },
     deleteEvent: function deleteEvent() {
       var _this3 = this;
@@ -16642,7 +16617,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       Object.keys(this.newEvent).forEach(function (key) {
         return _this5.newEvent[key] = "";
       });
-      console.log("done reset form");
     },
     testTimePicker: function testTimePicker() {
       console.log(" Time Picker: ", this.test_timepicker);
@@ -16841,8 +16815,7 @@ var render = function render() {
     staticClass: "form-control",
     attrs: {
       type: "text",
-      id: "event_name",
-      required: ""
+      id: "event_name"
     },
     domProps: {
       value: _vm.newEvent.event_name
@@ -16906,18 +16879,23 @@ var render = function render() {
   }, [_c("button", {
     staticClass: "btn btn-sm btn-success",
     on: {
-      click: _vm.updateEvent
+      click: function click($event) {
+        _vm.updateEvent(), _vm.resetForm();
+      }
     }
   }, [_vm._v("Update")]), _vm._v(" "), _c("button", {
     staticClass: "btn btn-sm btn-danger",
     on: {
-      click: _vm.deleteEvent
+      click: function click($event) {
+        _vm.deleteEvent(), _vm.resetForm();
+      }
     }
   }, [_vm._v("Delete")]), _vm._v(" "), _c("button", {
     staticClass: "btn btn-sm btn-secondary",
     on: {
       click: function click($event) {
-        _vm.addingMode = !_vm.addingMode;
+        ;
+        _vm.addingMode = !_vm.addingMode, _vm.resetForm();
       }
     }
   }, [_vm._v("Cancel")])])]], 2)])]), _vm._v(" "), _c("div", {
@@ -16957,14 +16935,27 @@ var render = function render() {
   var _vm = this,
       _c = _vm._self._c;
 
-  return _c("div", [_c("h2", [_vm._v("Login Form")]), _vm._v(" "), _c("button", {
-    staticClass: "btn btn-sm btn-secondary",
+  return _c("div", [_c("a", {
+    staticClass: "button",
+    attrs: {
+      type: "button"
+    },
+    on: {
+      click: function click($event) {
+        _vm.loginOrRegister = true;
+      }
+    }
+  }, [_c("span", {}), _vm._v("Login\n    ")]), _vm._v(" "), _c("a", {
+    staticClass: "buttonreg",
+    attrs: {
+      type: "button"
+    },
     on: {
       click: function click($event) {
         _vm.loginOrRegister = !_vm.loginOrRegister;
       }
     }
-  }, [_vm._v("Register")]), _vm._v(" "), _vm.loginOrRegister ? _c("div", {
+  }, [_c("span", {}), _vm._v("Register\n    ")]), _vm._v(" "), _vm.loginOrRegister ? _c("div", {
     staticClass: "card"
   }, [_c("article", {
     staticClass: "card-body"
@@ -17364,7 +17355,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\nbody {font-family: Arial, Helvetica, sans-serif;}\nform {border: 3px solid #f1f1f1;}\ninput[type=email],[type=text], input[type=password] {\r\n  width: 100%;\r\n  padding: 12px 20px;\r\n  margin: 8px 0;\r\n  /* display: inline-block; */\r\n  border: 1px solid #ccc;\r\n  box-sizing: border-box;\n}\nbutton {\r\n  background-color: #04AA6D;\r\n  color: white;\r\n  padding: 14px 20px;\r\n  margin: 8px 0;\r\n  border: none;\r\n  cursor: pointer;\r\n  width: 100%;\n}\n.form-group {\r\n    position: relative;\n}\n.center {\r\n  margin: 0;\r\n  position: relative;\r\n top: 50%;\r\n  left: 50%;\r\n  /* right: 0px ;\r\n  bottom: 0px;  */\r\n  -ms-transform: translate(-50%, -50%);\r\n  transform: translate(-50%, -50%);\n}\r\n\r\n/* button:hover {\r\n  opacity: 0.8;\r\n} */\n.cancelbtn {\r\n  width: auto;\r\n  padding: 10px 18px;\r\n  background-color: #f44336;\n}\n.imgcontainer {\r\n  text-align: center;\r\n  /* display: block; */\r\n  margin-left: auto;\r\n  margin-right: auto;\r\n  width: 50%;\n}\r\n\r\n/* .avatar {\r\n  display: block;\r\n  margin-left: auto;\r\n  margin-right: auto;\r\n  width: 50%;\r\n} */\nimg.avatar {\r\n  width: 40%;\r\n  border-radius: 50%;\n}\r\n\r\n/* .container {\r\n  padding: 16px;\r\n} */\nspan.psw {\r\n  float: right;\r\n  padding-top: 16px;\n}\r\n\r\n/* Change styles for span and cancel button on extra small screens */\n@media screen and (max-width: 300px) {\nspan.psw {\r\n     display: block;\r\n     float: none;\n}\n.cancelbtn {\r\n     width: 100%;\n}\n}\r\n", ""]);
+exports.push([module.i, "\nbody {font-family: Arial, Helvetica, sans-serif;}\nform {border: 3px solid #f1f1f1;}\ninput[type=email],[type=text], input[type=password] {\r\n  width: 100%;\r\n  padding: 12px 20px;\r\n  margin: 8px 0;\r\n  /* display: inline-block; */\r\n  border: 1px solid #ccc;\r\n  box-sizing: border-box;\n}\nbutton {\r\n  background-color: #04AA6D;\r\n  color: white;\r\n  padding: 14px 20px;\r\n  margin: 8px 0;\r\n  left:10px;\r\n  border: none;\r\n  cursor: pointer;\r\n  width: 100%;\n}\n.buttonreg {\r\n    position:relative; left:48px; top:0px;\n}\n.form-group {\r\n    position: relative;\n}\n.center {\r\n  margin: 0;\r\n  position: relative;\r\n top: 50%;\r\n  left: 50%;\r\n  /* right: 0px ;\r\n  bottom: 0px;  */\r\n  -ms-transform: translate(-50%, -50%);\r\n  transform: translate(-50%, -50%);\n}\r\n\r\n/* button:hover {\r\n  opacity: 0.8;\r\n} */\n.cancelbtn {\r\n  width: auto;\r\n  padding: 10px 18px;\r\n  background-color: #f44336;\n}\n.imgcontainer {\r\n  text-align: center;\r\n  /* display: block; */\r\n  margin-left: auto;\r\n  margin-right: auto;\r\n  width: 50%;\n}\r\n\r\n/* .avatar {\r\n  display: block;\r\n  margin-left: auto;\r\n  margin-right: auto;\r\n  width: 50%;\r\n} */\nimg.avatar {\r\n  width: 40%;\r\n  border-radius: 50%;\n}\r\n\r\n/* .container {\r\n  padding: 16px;\r\n} */\nspan.psw {\r\n  float: right;\r\n  padding-top: 16px;\n}\r\n\r\n/* Change styles for span and cancel button on extra small screens */\n@media screen and (max-width: 300px) {\nspan.psw {\r\n     display: block;\r\n     float: none;\n}\n.cancelbtn {\r\n     width: 100%;\n}\n}\r\n", ""]);
 
 // exports
 

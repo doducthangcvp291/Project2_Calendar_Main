@@ -1,7 +1,12 @@
 <template>
     <div >
-        <h2>Login Form</h2>
-        <button class="btn btn-sm btn-secondary" @click="loginOrRegister = !loginOrRegister">Register</button>
+        <a  type="button" class="button" @click="loginOrRegister = true">
+          <span class=""></span>Login
+        </a>
+        <!-- <button class="btn btn-sm btn-secondary" @click="loginOrRegister = !loginOrRegister">Register</button> -->
+        <a  type="button" class="buttonreg" @click="loginOrRegister = !loginOrRegister">
+          <span class=""></span>Register
+        </a>
             <div class="card" v-if="loginOrRegister">
                 <article class="card-body">
 
@@ -145,9 +150,14 @@ button {
   color: white;
   padding: 14px 20px;
   margin: 8px 0;
+  left:10px;
   border: none;
   cursor: pointer;
   width: 100%;
+}
+
+.buttonreg {
+    position:relative; left:48px; top:0px;
 }
 .form-group {
     position: relative;
