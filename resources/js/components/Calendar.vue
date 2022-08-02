@@ -6,8 +6,7 @@ import interactionPlugin from "@fullcalendar/interaction";
 import axios from "axios";
 import datepicker from 'vue2-datepicker';
 import datetime from 'vuejs-datetimepicker';
-// import { logout } from '../helpers/auth';
-//import { mapGetters } from "vuex";
+
 export default {
   name: 'Calendar',
   components: {
@@ -40,7 +39,6 @@ export default {
   created() {
     this.getEvents();
   },
-  //computed: mapGetters(['CURRENT_USER_ACCESS_TOKEN']),
 
   methods: {
     handleSelect(selectInfo){
@@ -116,15 +114,7 @@ export default {
                 console.log('getListEventError',error)
             }
         },
-    // getEvents() {
-    //   axios
-    //     .get("/api/calendar",{ headers: { Authorization: this.$store.state.currentUser.token } })
-    //     .then(resp => {
-    //                     console.log(" Res getEvent: ",resp)
-    //                     this.events = resp.data.data ;
-    //                     })
-    //     .catch(err => console.log(err.response.data));
-    // },
+
     resetForm() {
       Object.keys(this.newEvent).forEach(key => {
         return (this.newEvent[key] = "");
@@ -168,69 +158,55 @@ export default {
 </script>
 <template>
 <div>
-
-  <!-- <div class="fixed">
-      <nav class="top-bar" data-topbar role="navigation">
-        <button type="button" class="btn btn-sm btn-primary"  @click="userLogOut">Log out</button>
-      </nav>
-  </div> -->
   <nav class="navbar navbar-default" role="navigation">
       <div class="navbar-header">
         <a  type="button" class="btn btn-default navbar-btn" @click="userLogOut">
           <span class="glyphicon glyphicon-home"></span>Log out
         </a>
-        
-        <!-- <a  href="#" type="button" class="btn btn-default navbar-btn pull-right">
-          <span class="glyphicon glyphicon-shopping-cart"></span>Cart
-        </a> -->
+
       </div>
   </nav>
   <div class="calendar-app">    
       <div class="calendar-app-sidebar">
-        <form @submit.prevent class='calendar-app-sidebar-section'>
-   
-                <div class="calendar-app-sidebar-section">  
-                             
-                                  <label for="event_name">Event Name</label>
-                                  <input type="text" id="event_name" class="form-control" v-model="newEvent.event_name" >
-                                      
-                      
-                                  <div class="form-group">
-                                    <label for="start_date">Start Date</label>
-                                      <datetime
-                                        id="start_date"
-                                        class="form-control" 
-                                        v-model="newEvent.start_date" 
-                                        format = "YYYY-MM-DD H:i:s" required                                                                                 
-                                      />                          
-                                  </div>               
-                                  <div class=" form-group">
-                                    <label for="end_date">End Date</label>
-                                    <!-- <input type="date" id="end_date" class="form-control" v-model="newEvent.end_date"/> -->
-                                        <datetime 
-                                          id="end_date"
-                                          class="form-control" 
-                                          v-model="newEvent.end_date" 
-                                          format = "YYYY-MM-DD H:i:s" required                                                                                 
-                                        />
-                                  </div>
-                              
+        <form @submit.prevent class='calendar-app-sidebar-section'>   
+              <div class="calendar-app-sidebar-section">                              
+                        <label for="event_name">Event Name</label>
+                        <input type="text" id="event_name" class="form-control" v-model="newEvent.event_name" >                                     
+            
+                        <div class="form-group">
+                          <label for="start_date">Start Date</label>
+                            <datetime
+                              id="start_date"
+                              class="form-control" 
+                              v-model="newEvent.start_date" 
+                              format = "YYYY-MM-DD H:i:s" required                                                                                 
+                            />                          
+                        </div>               
+                        <div class=" form-group">
+                          <label for="end_date">End Date</label>
+                              <datetime 
+                                id="end_date"
+                                class="form-control" 
+                                v-model="newEvent.end_date" 
+                                format = "YYYY-MM-DD H:i:s" required                                                                                 
+                              />
+                        </div>
+                            
 
-                              <div class=" calendar-app-sidebar-section-child col-md-6 mb-4" v-if="addingMode">
-                                <button class="btn btn-sm btn-primary" @click="addNewEvent">Save Event</button>
-                              </div>                      
-                                      
-                        
-                              <template v-else>
-                                <div class="calendar-app-sidebar-section-child col-md-6 mb-4">
+                        <div class=" calendar-app-sidebar-section-child col-md-6 mb-4" v-if="addingMode">
+                          <button class="btn btn-sm btn-primary" @click="addNewEvent">Save Event</button>
+                        </div>                    
+                                
+                  
+                        <template v-else>
+                          <div class="calendar-app-sidebar-section-child col-md-6 mb-4">
 
-                                  <button class="btn btn-sm btn-success" @click="updateEvent(),resetForm()">Update</button>
-                                  <button class="btn btn-sm btn-danger" @click="deleteEvent(),resetForm()">Delete</button>
-                                  <button class="btn btn-sm btn-secondary" @click="addingMode = !addingMode , resetForm()">Cancel</button>
-                                </div>
-                              </template>
-                </div>
-
+                            <button class="btn btn-sm btn-success" @click="updateEvent(),resetForm()">Update</button>
+                            <button class="btn btn-sm btn-danger" @click="deleteEvent(),resetForm()">Delete</button>
+                            <button class="btn btn-sm btn-secondary" @click="addingMode = !addingMode , resetForm()">Cancel</button>
+                          </div>
+                        </template>
+              </div>
         </form>
       </div>
       <div class="calendar-app-main">
@@ -241,8 +217,6 @@ export default {
   </div>
 </div>
 </template>
-
-
 
 <style lang="css">
 @import "~@fullcalendar/core/main.css";

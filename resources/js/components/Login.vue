@@ -3,7 +3,7 @@
         <a  type="button" class="button" @click="loginOrRegister = true">
           <span class=""></span>Login
         </a>
-        <!-- <button class="btn btn-sm btn-secondary" @click="loginOrRegister = !loginOrRegister">Register</button> -->
+
         <a  type="button" class="buttonreg" @click="loginOrRegister = !loginOrRegister">
           <span class=""></span>Register
         </a>
@@ -97,12 +97,12 @@
             authenticate() {
                 this.$store.dispatch("LOGIN");
 
-                login(this.$data.form)// ham login ben help/auth
+                login(this.$data.form)
                     .then(res => {
                         console.log("res after login:  ",res);
                         this.$store.commit("LOGIN_SUCCESS", res);
                         this.$router.push({path: '/'}).catch(()=>{});
-                        //console.log("state after login : ",this.$store.state)
+                        
                     })
                     .catch(err => {
                         this.$store.commit("LOGIN_FAILED", {err})
@@ -114,8 +114,6 @@
                     .then(res => {
                         console.log("res after register:  ",res);
                         this.loginOrRegister = !this.loginOrRegister ;                        
-                        // this.$router.push({path: '/login'}).catch(()=>{});
-                        //console.log("state after login : ",this.$store.state)
                     })
                     .catch(err => {
                         
